@@ -350,24 +350,58 @@
 // module.exports = app;
 
 
-const express = require('express');
-const cors = require('cors');
+// const express = require('express');
+// const cors = require('cors');
+// require('dotenv').config();
+
+// const app = express();
+// app.use(cors());
+// app.use(express.json());
+
+// // Simple health check endpoint
+// app.get('/', (req, res) => {
+//   res.json({ 
+//     message: 'iOS App API is running',
+//     endpoints: {
+//       'POST /api/checkout': 'Initialize checkout session',
+//       'GET /api/checkorder': 'Check order status'
+//     }
+//   });
+// });
+
+// // Export the Express app for Vercel
+// module.exports = app;
+
 require('dotenv').config();
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+// Serverless function handler for Vercel
+module.exports = async (req, res) => {
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
 
-// Simple health check endpoint
-app.get('/', (req, res) => {
-  res.json({ 
-    message: 'iOS App API is running',
-    endpoints: {
-      'POST /api/checkout': 'Initialize checkout session',
-      'GET /api/checkorder': 'Check order status'
-    }
-  });
-});
+  // Only allow GET method for this endpoint
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
-// Export the Express app for Vercel
-module.exports = app;
+  try {
+    res.status(200).json({ 
+      message: 'iOS App API is running',
+      endpoints: {
+        'POST /api/checkout': 'Initialize checkout session',
+        'GET /api/checkorder': 'Check order status'
+      },
+      status: 'healthy'
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
