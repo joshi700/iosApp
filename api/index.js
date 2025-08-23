@@ -261,89 +261,112 @@
 // // Export the Express app for Vercel
 // module.exports = app;
 
+// const express = require('express');
+// const cors = require('cors');
+// const axios = require('axios');
+// const crypto = require("crypto");
+// require('dotenv').config();
+
+// const app = express();
+// app.use(cors());
+// app.use(express.json());
+
+// // Handle root /api route for POST requests
+// app.post('/', async (req, res) => {
+//     const id = crypto.randomBytes(16).toString("hex");
+//     const data = JSON.stringify({
+//       "apiOperation": "INITIATE_CHECKOUT",
+//       "checkoutMode": "WEBSITE",
+//       "interaction": {
+//         "operation": "PURCHASE",
+//         "merchant": {
+//           "name": "JK Enterprises LLC",
+//           "url": "https://apitest.free.beeceptor.com"
+//         },
+//         "returnUrl": "myapp://receipt",
+//         "displayControl": {
+//           "billingAddress": "READ_ONLY",
+//           "customerEmail": "READ_ONLY",
+//           "shipping": "READ_ONLY"
+//         }
+//       },
+//       "order": {
+//         "currency": "USD",
+//         "amount": "250.00",
+//         "id": id,
+//         "description": "Goods and Services"
+//       }
+//     });
+  
+//     const config = {
+//       method: 'post',
+//       maxBodyLength: Infinity,
+//       url: 'https://mtf.gateway.mastercard.com/api/rest/version/llaatteesstt/merchant/TESTMIDtesting00/session',
+//       headers: { 
+//         'Content-Type': 'application/json', 
+//         'Authorization': process.env.PASSWORD
+//       },
+//        data
+//     };
+  
+//     try {
+//       const response1 = await axios.request(config);
+//       console.log(JSON.stringify(response1.data.session.id));
+//       res.send(response1.data.session.id);
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ error: 'Failed to initiate checkout session' });
+//     }
+// });
+
+// // Handle /checkorder route  
+// app.get('/checkorder', async (req, res) => {
+//     const orderId = req.query.orderid;
+  
+//     if (!orderId) {
+//       return res.status(400).json({ error: 'Missing orderid parameter' });
+//     }
+  
+//     const config = {
+//       method: 'get',
+//       maxBodyLength: Infinity,
+//       url: `https://mtf.gateway.mastercard.com/api/rest/version/llaatteesstt/merchant/TESTMIDtesting00/order/${orderId}`,
+//       headers: { 
+//         'Authorization': process.env.PASSWORD
+//       }
+//     };
+  
+//     try {
+//       const response = await axios.request(config);
+//       console.log(JSON.stringify(response.data));
+//       return res.json(response.data);
+//     } catch (error) {
+//       console.error(error);
+//       return res.status(500).json({ error: 'Failed to fetch order information' });
+//     }
+// });
+
+// // Export the Express app for Vercel
+// module.exports = app;
+
+
 const express = require('express');
 const cors = require('cors');
-const axios = require('axios');
-const crypto = require("crypto");
 require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Handle root /api route for POST requests
-app.post('/', async (req, res) => {
-    const id = crypto.randomBytes(16).toString("hex");
-    const data = JSON.stringify({
-      "apiOperation": "INITIATE_CHECKOUT",
-      "checkoutMode": "WEBSITE",
-      "interaction": {
-        "operation": "PURCHASE",
-        "merchant": {
-          "name": "JK Enterprises LLC",
-          "url": "https://apitest.free.beeceptor.com"
-        },
-        "returnUrl": "myapp://receipt",
-        "displayControl": {
-          "billingAddress": "READ_ONLY",
-          "customerEmail": "READ_ONLY",
-          "shipping": "READ_ONLY"
-        }
-      },
-      "order": {
-        "currency": "USD",
-        "amount": "250.00",
-        "id": id,
-        "description": "Goods and Services"
-      }
-    });
-  
-    const config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: 'https://mtf.gateway.mastercard.com/api/rest/version/llaatteesstt/merchant/TESTMIDtesting00/session',
-      headers: { 
-        'Content-Type': 'application/json', 
-        'Authorization': process.env.PASSWORD
-      },
-       data
-    };
-  
-    try {
-      const response1 = await axios.request(config);
-      console.log(JSON.stringify(response1.data.session.id));
-      res.send(response1.data.session.id);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to initiate checkout session' });
+// Simple health check endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'iOS App API is running',
+    endpoints: {
+      'POST /api/checkout': 'Initialize checkout session',
+      'GET /api/checkorder': 'Check order status'
     }
-});
-
-// Handle /checkorder route  
-app.get('/checkorder', async (req, res) => {
-    const orderId = req.query.orderid;
-  
-    if (!orderId) {
-      return res.status(400).json({ error: 'Missing orderid parameter' });
-    }
-  
-    const config = {
-      method: 'get',
-      maxBodyLength: Infinity,
-      url: `https://mtf.gateway.mastercard.com/api/rest/version/llaatteesstt/merchant/TESTMIDtesting00/order/${orderId}`,
-      headers: { 
-        'Authorization': process.env.PASSWORD
-      }
-    };
-  
-    try {
-      const response = await axios.request(config);
-      console.log(JSON.stringify(response.data));
-      return res.json(response.data);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: 'Failed to fetch order information' });
-    }
+  });
 });
 
 // Export the Express app for Vercel
