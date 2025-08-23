@@ -75,7 +75,7 @@ module.exports = async (req, res) => {
       maxBodyLength: Infinity,
       url: `https://mtf.gateway.mastercard.com/api/rest/version/llaatteesstt/merchant/TESTMIDtesting00/order/${orderId}`,
       headers: { 
-        'Authorization': `Basic ${process.env.PASSWORD}`
+        'Authorization': '${process.env.PASSWORD}'
       }
     };
 

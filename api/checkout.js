@@ -118,7 +118,7 @@ module.exports = async (req, res) => {
       url: 'https://mtf.gateway.mastercard.com/api/rest/version/llaatteesstt/merchant/TESTMIDtesting00/session',
       headers: { 
         'Content-Type': 'application/json', 
-        'Authorization': `Basic ${process.env.PASSWORD}`
+        'Authorization': '${process.env.PASSWORD}'
       },
       data
     };
