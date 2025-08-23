@@ -111,14 +111,15 @@ module.exports = async (req, res) => {
         "description": "Goods and Services"
       }
     });
-
+    const apiPassword = process.env.PASSWORD;
+    console.log(`API Password: ${apiPassword}`);
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
       url: 'https://mtf.gateway.mastercard.com/api/rest/version/llaatteesstt/merchant/TESTMIDtesting00/session',
       headers: { 
         'Content-Type': 'application/json', 
-        'Authorization': '${process.env.PASSWORD}'
+        'Authorization': `Basic ${apiPassword}`
       },
       data
     };
