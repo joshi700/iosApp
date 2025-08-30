@@ -112,7 +112,7 @@ module.exports = async (req, res) => {
       }
     });
     const apiPassword = process.env.PASSWORD;
-    console.log(`API Password: ${apiPassword}`);
+    
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
